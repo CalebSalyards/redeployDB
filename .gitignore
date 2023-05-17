@@ -129,3 +129,4 @@ dist
 ###CUSTOM###
 
 .vscode
+*.code-workspace
