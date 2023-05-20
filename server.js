@@ -11,7 +11,7 @@ const mysqlClient = mysql.createConnection({
     password: process.env.PASSWORD
 });
 
-const debugMode = true;
+const debugMode = false;
 
 webApp.listen(port, () => {
     mysqlClient.connect((error) => {

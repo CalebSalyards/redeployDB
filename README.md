@@ -3,21 +3,24 @@
 
 ## Overview
 
-{Important! Do not say in this section that this is college assignment. Talk about what you are trying to accomplish as a software engineer to further your learning.}
+Ringdown Redeploy is WIP software that aims to provide soft-imaging as a backup/restore or device migration method. In order for it to accomplish this, there needs to be means by which the applciation can automate the installation of applications on a new or recently-reset device.
 
-{Provide a description of the software that you wrote and how it integrates with a SQL Relational Database. Describe how to use your program.}
+This database aims to provide that information. Within will contain an ever-growing list of applications, along with the means by which the application can be downloaded and (ideally) automatically installed by the main Ringdown application.
 
-{Describe your purpose for writing this software.}
+In addition, the database offers the methods by which application data and registry entries can be backed up and restored automatically.
 
-{Provide a link to your YouTube demonstration. It should be a 4-5 minute demo of the software running, a walkthrough of the code, and a view of how created the Relational Database.}
-
-[Software Demo Video](http://youtube.link.goes.here)
+[Software Demo Video](https://drive.google.com/file/d/11xxzFv4iBVCRgnjeyECNCEQGBpqoZ31y/view?usp=share_link)
 
 ## Relational Database
 
-{Describe the relational database you are using.}
+The relational database of choice for this project is MySQL Server 8. Why? Mostly because it's relatively low-effort and quick to respond even with much larger datasets. I may migrate things to Redis if it turns out a NoSQL option would be more performant.
 
-{Describe the structure (tables) of the relational database that you created.}
+The actual structure of the database is as follows:
+* `AppData` - The name of the database
+    * `Application` - A list of applications tracked by the Redeploy database
+    * `InstallMethod` - A many-to-one list of methods any given application can be installed.
+    * `RegistryEntries` - A many-to-one list of locations a given application makes entries in the registry. Useful for making backups.
+    * `ApplicationData` - A many-to-one list of locations a given application stores its data. Useful for making backups.
 
 ## Development Environment
 
@@ -60,8 +63,11 @@ Of course, since NodeJS is super convenient, you can just use `npm install` to a
 
 ## Future Work
 
-{Make a list of things that you need to fix, improve, and add in the future.}
+The database's overall structure is _almost_ where I want it to be. The API, however, is far from ideal.
+Among other improvements, there is currently no way to access most of the data in the actual database, which will be necessary if the application is to ever fulfill its end goals.
 
-- Item 1
-- Item 2
-- Item 3
+- Refine permissions (what public users can do)
+- Separate access point for admins
+- Cleaner de-duplication implementation
+- Switch to Redis?
+- More SELECT implementations for the application to use!!

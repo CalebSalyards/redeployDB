@@ -54,3 +54,4 @@ CREATE TABLE ApplicationData (
     FOREIGN KEY (ApplicationID)
         REFERENCES Application(ID)
 );
+
