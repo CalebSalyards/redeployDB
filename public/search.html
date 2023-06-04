@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <title>Search Page</title>
+        <link rel="stylesheet" href="header-nav.css">
+        <link rel="stylesheet" href="body.css">
+        <link rel="stylesheet" href="search.css">
+        <script type="text/javascript" src="search.js"></script>
+    </head>
+    <body>
+        <header>
+            <div class="header-main">
+                <a href="/"><img src="logo.svg" alt="Logo"></a>
+                <h1>Redeploy</h1>
+            </div>
+            <h2>Application Data Automated</h2>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="/add-application">Add Application</a></li>
+                <li><a href="/add-install-method">Add Install Method</a></li>
+                <li><a href="/add-registry-info">Add Registry Info</a></li>
+                <li><a href="/add-data-location">Add Data Location</a></li>
+                <li><a href="/add-tag">Add Tag</a></li>
+                <li><a href="/search">Search</a></li>
+            </ul>
+        </nav>
+        <h1>Search Applications</h1>
+        <div class="search-box">
+            <!-- <form action="/search" method="POST"> -->
+            <form id="query-data">
+                <input type="text" name="query" placeholder="Search for an application here">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+        <br>
+        <div id="results">
+
+        </div>
+    </body>
+</html>

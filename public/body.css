@@ -1,0 +1,75 @@
+body {
+font-family: Arial, sans-serif;
+background-color: #333;
+}
+  
+h1 {
+    text-align: center;
+    color: #bbb;
+}
+
+form, body p {
+    width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #cccccc;
+    background-color: #222;
+    line-height: 1.5em;
+}
+
+input, textarea {
+    margin: 10px 0;
+    color: #ccc;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #555;
+    color: #ccc
+}
+
+input[type="submit"],input[type="reset"] {
+    width: auto;
+    padding: 10px 20px;
+    background-color: #06d;
+    color: #fff;
+    border: none;
+}
+
+.hastooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted white;
+    color: #ccc;
+}
+  
+.hasTooltip .tooltip {
+    visibility: hidden;
+    width: 400px;
+    background-color: black;
+    color: #fff;
+    text-align: left;
+    border-radius: 6px;
+    padding: 5px 0;
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+    top: -5px;
+    left: 150%;
+    /* margin-left: -60px; */
+    padding-left: 10px;
+}
+  
+.hastooltip:hover .tooltip {
+    visibility: visible;
+}
+
+.hasTooltip .tooltip::after {
+    content: " ";
+    position: absolute;
+    top: 50%;
+    right: 100%; /* To the left of the tooltip */
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent black transparent transparent;
+  }

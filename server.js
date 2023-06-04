@@ -12,29 +12,73 @@ const mysqlClient = mysql.createConnection({
 });
 
 const debugMode = false;
+const toRed = '\x1b[31m'
+const toWhite = '\x1b[0m'
 
 webApp.listen(port, () => {
     mysqlClient.connect((error) => {
+        console.log("Connecting to Database...");
         if (error) {
             if (error.code == 'ECONNREFUSED') {
-                console.log("The database appears to be turned off.");
+                console.log(toRed + 'The database appears to be turned off.' + toWhite);
                 process.exit()
             } else {
                 throw error;
             }
+        } else {
+            console.log("Connected to MySQL Server");
         }
     });
     mysqlClient.query('USE AppData;')
-    console.log("Connected to MySQL Server");
     console.log("Listening on port: " + port);
 });
 
-webApp.get('/', (request, result) => {
+webApp.use(express.static('public'));
+
+webApp.get('/add-application', (request, result) => {
     console.log("GET request received.")
-    result.send("<h1>Welcome, welcome! There's nothing here for now.</h1>");
+    result.sendFile(__dirname + '/public/add-application.html');
+    // result.send("<h1>Welcome, welcome! There's nothing here for now.</h1>");
+});
+
+webApp.get('/add-install-method', (request, result) => {
+    console.log("GET request received.")
+    result.sendFile(__dirname + '/public/add-install-method.html');
+    // result.send("<h1>Welcome, welcome! There's nothing here for now.</h1>");
+});
+
+webApp.get('/add-registry-info', (request, result) => {
+    console.log("GET request received.")
+    result.sendFile(__dirname + '/public/add-registry-info.html');
+    // result.send("<h1>Welcome, welcome! There's nothing here for now.</h1>");
+});
+
+webApp.get('/add-data-location', (request, result) => {
+    console.log("GET request received.")
+    result.sendFile(__dirname + '/public/add-data-location.html');
+    // result.send("<h1>Welcome, welcome! There's nothing here for now.</h1>");
+});
+
+webApp.get('/add-tag', (request, result) => {
+    console.log("GET request received.")
+    result.sendFile(__dirname + '/public/add-tag.html');
+    // result.send("<h1>Welcome, welcome! There's nothing here for now.</h1>");
+});
+
+webApp.get('/search', (request, result) => {
+    console.log("GET request received.")
+    result.sendFile(__dirname + '/public/search.html');
+    // result.send("<h1>Welcome, welcome! There's nothing here for now.</h1>");
+});
+
+webApp.get('/Robtronika.ttf', (request, result) => {
+    console.log("GET request received (font).")
+    result.sendFile(__dirname + '/public/Robtronkia.tff');
+    // result.send("<h1>Welcome, welcome! There's nothing here for now.</h1>");
 });
 
 webApp.use(bodyParser.json());
+webApp.use(bodyParser.urlencoded({ extended: false}));
 
 webApp.post('/add-prog', async (request, result) => {
     console.log("POST request received at /add-prog");
@@ -47,7 +91,7 @@ webApp.post('/add-prog', async (request, result) => {
     mysqlClient.query('SELECT count(*) AS Duplicates FROM Application WHERE (Name = ?) AND (Uninstaller = ?);', [name, uninstaller], (error, results, fields) => {
         if (error) throw error;
         if ((results[0].Duplicates) && (debugMode == false)) {
-            const resultString = 'An Application under the name ' + name + ' with the Uninstall name of ' + uninstaller + ' already exists.';
+            const resultString = 'An Application under the name ' + name + ' with the uninstaller name of ' + uninstaller + ' already exists.';
             console.log(resultString);
             result.send(resultString);
             return
@@ -164,17 +208,38 @@ webApp.post('/add-tag', async (request, result) => {
 webApp.post('/search', async (request, result) => {
     let body = request.body;
     let query = mysqlClient.escape('%' + body.query + '%');
+    console.log(body.query)
     mysqlClient.query('SELECT ID, Name, Uninstaller FROM Application WHERE (Name LIKE ?) OR (Uninstaller LIKE ?) OR (JSON_SEARCH(Tags, "one", ?));', [query, query, query], (error, results, fields) => {
         if (error) throw error;
         if (results.length) {
-            output = 'Found ' + results.length + ' results for "' + body.query + '"\n';
+            output = {}
+            output['header'] = 'Found ' + results.length + ' results for "' + body.query + '"';
+            output['results'] = [];
             for (var i in results) {
-                output = output + 'ID: ' + results[i].ID + "\tName: " + results[i].Name + '\n';
+                output['results'][i] = {};
+                output['results'][i]['ID'] = results[i].ID
+                output['results'][i]['name'] = results[i].Name;
             }
-        } else output = 'No results found for "' + body.query;
-        console.log(output);
-        result.send(output);
+        } else {
+            output = {}
+            output['header'] = 'No results found for "' + body.query + '"';
+        }
+        console.log(JSON.stringify(output));
+        result.send(JSON.stringify(output));
     });
+    // mysqlClient.query('SELECT ID, Name, Uninstaller FROM Application WHERE (Name LIKE ?) OR (Uninstaller LIKE ?) OR (JSON_SEARCH(Tags, "one", ?));', [query, query, query], (error, results, fields) => {
+    //     if (error) throw error;
+    //     if (results.length) {
+    //         output = 'Found ' + results.length + ' results for "' + body.query + '"\n';
+    //         for (var i in results) {
+    //             output = output + 'ID: ' + results[i].ID + "\tName: " + results[i].Name + '\n';
+    //         }
+    //     } else {
+    //         output = 'No results found for "' + body.query;
+    //     }
+    //     console.log(output);
+    //     result.send(output);
+    // });
 })
 
 webApp.post('/dedupe', async (request, result) => {

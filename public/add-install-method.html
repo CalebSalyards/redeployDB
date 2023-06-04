@@ -1,0 +1,56 @@
+<html>
+    <head>
+        <title>New Install Method</title>
+        <link rel="stylesheet" href="header-nav.css">
+        <link rel="stylesheet" href="body.css">
+    </head>
+    <body>
+        <header>
+            <div class="header-main">
+                <a href="/"><img src="logo.svg" alt="Logo"></a>
+                <h1>Redeploy</h1>
+            </div>
+            <h2>Application Data Automated</h2>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="/add-application">Add Application</a></li>
+                <li><a href="/add-install-method">Add Install Method</a></li>
+                <li><a href="/add-registry-info">Add Registry Info</a></li>
+                <li><a href="/add-data-location">Add Data Location</a></li>
+                <li><a href="/add-tag">Add Tag</a></li>
+                <li><a href="/search">Search</a></li>
+            </ul>
+        </nav>
+        <h1>Add Install Method</h1>
+        <form action="/add-prog" method="POST">
+            <div class="hasTooltip">
+                Application ID:
+                <span class="tooltip">The ID of the associated application</span>
+            </div>
+            <input type="text" name="applicationID" required>
+            <div class="hasTooltip">
+                Install Method:
+                <span class="tooltip">The category of method this entry denotes</span>
+            </div>
+            <input type="text" name="installMethod">
+            <div class="hasTooltip">
+                Location:
+                <span class="tooltip">The location of the installer. (Either a URL or the WinGet ID)</span>
+            </div>
+            <input type="text" name="location" required>
+            <div class="hasTooltip">
+                Silent Flag:
+                <span class="tooltip">The command line flag to install the application silently</span>
+            </div>
+            <input type="text" name="silentFlag">
+            <div class="hasTooltip">
+                Path Flag:
+                <span class="tooltip">The command line flag used to change the location the application installs to</span>
+            </div>
+            <input type="text" name="pathFlag">
+            <input type="submit" value="Submit">
+            <input type="reset" value="Reset">
+        </form>
+    </body>
+</html>

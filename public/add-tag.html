@@ -1,0 +1,41 @@
+<html>
+    <head>
+        <title>Add Application Tags</title>
+        <link rel="stylesheet" href="header-nav.css">
+        <link rel="stylesheet" href="body.css">
+    </head>
+    <body>
+        <header>
+            <div class="header-main">
+                <a href="/"><img src="logo.svg" alt="Logo"></a>
+                <h1>Redeploy</h1>
+            </div>
+            <h2>Application Data Automated</h2>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="/add-application">New Application</a></li>
+                <li><a href="/add-install-method">New Install Method</a></li>
+                <li><a href="/add-registry-info">New Registry Info</a></li>
+                <li><a href="/add-data-location">New Data Location</a></li>
+                <li><a href="/add-tag">Add Tag</a></li>
+                <li><a href="/search">Search</a></li>
+            </ul>
+        </nav>
+        <h1>New Application Tags</h1>
+        <form action="/add-tag" method="POST">
+            <div class="hasTooltip">
+                Application ID:
+                <span class="tooltip">The ID of the associated application</span>
+            </div>
+            <input type="text" name="applicationID" required>
+            <div class="hasTooltip">
+                Tags:
+                <span class="tooltip">Comma-separated list of tag(s) to add</span>
+            </div>
+            <input type="text" name="newTag" required>
+            <input type="submit" value="Submit">
+            <input type="reset" value="Reset">
+        </form>
+    </body>
+</html>

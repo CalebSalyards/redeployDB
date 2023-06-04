@@ -1,0 +1,56 @@
+<html>
+    <head>
+        <title>New Application</title>
+        <link rel="stylesheet" href="header-nav.css">
+        <link rel="stylesheet" href="body.css">
+    </head>
+    <body>
+        <header>
+            <div class="header-main">
+                <a href="/"><img src="logo.svg" alt="Logo"></a>
+                <h1>Redeploy</h1>
+            </div>
+            <h2>Application Data Automated</h2>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="/add-application">Add Application</a></li>
+                <li><a href="/add-install-method">Add Install Method</a></li>
+                <li><a href="/add-registry-info">Add Registry Info</a></li>
+                <li><a href="/add-data-location">Add Data Location</a></li>
+                <li><a href="/add-tag">Add Tag</a></li>
+                <li><a href="/search">Search</a></li>
+            </ul>
+        </nav>
+        <h1>Application Information</h1>
+        <form action="/add-prog" method="POST">
+            <div class="hasTooltip">
+                Name:
+                <span class="tooltip">The official name of the application</span>
+            </div>
+            <input type="text" name="name" required>
+            <div class="hasTooltip">
+                Uninstaller:
+                <span class="tooltip">The name of the application according to the OS listing (can be left blank if unknown or the same as above)</span>
+            </div>
+            <input type="text" name="uninstaller">
+            <div class="hasTooltip">
+                Homepage:
+                <span class="tooltip">The Homepage URL for the application (can be left blank if no URL is known)</span>
+            </div>
+            <input type="url" name="homepage">
+            <div class="hasTooltip">
+                Version:
+                <span class="tooltip">The latest known version compatible with this software ('latest' if all versions work)</span>
+            </div>
+            <input type="text" name="version" required>
+            <div class="hasTooltip">
+                Tags:
+                <span class="tooltip">Comma-separated list of tags for easier searching</span>
+            </div>
+            <input type="text" name="tags">
+            <input type="submit" value="Submit">
+            <input type="reset" value="Reset">
+        </form>
+    </body>
+</html>

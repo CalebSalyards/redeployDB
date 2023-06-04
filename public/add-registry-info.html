@@ -1,0 +1,46 @@
+<html>
+    <head>
+        <title>New Registry Location</title>
+        <link rel="stylesheet" href="header-nav.css">
+        <link rel="stylesheet" href="body.css">
+    </head>
+    <body>
+        <header>
+            <div class="header-main">
+                <a href="/"><img src="logo.svg" alt="Logo"></a>
+                <h1>Redeploy</h1>
+            </div>
+            <h2>Application Data Automated</h2>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="/add-application">Add Application</a></li>
+                <li><a href="/add-install-method">Add Install Method</a></li>
+                <li><a href="/add-registry-info">Add Registry Info</a></li>
+                <li><a href="/add-data-location">Add Data Location</a></li>
+                <li><a href="/add-tag">Add Tag</a></li>
+                <li><a href="/search">Search</a></li>
+            </ul>
+        </nav>
+        <h1>New Registry Location</h1>
+        <form action="/add-prog" method="POST">
+            <div class="hasTooltip">
+                Application ID:
+                <span class="tooltip">The ID of the associated application</span>
+            </div>
+            <input type="text" name="applicationID" required>
+            <div class="hasTooltip">
+                Key Location:
+                <span class="tooltip">The location that the registry key is found in</span>
+            </div>
+            <input type="text" name="keyLocation">
+            <div class="hasTooltip">
+                Path:
+                <span class="tooltip">The path of the key, relative to the above location</span>
+            </div>
+            <input type="url" name="path">
+            <input type="submit" value="Submit">
+            <input type="reset" value="Reset">
+        </form>
+    </body>
+</html>
