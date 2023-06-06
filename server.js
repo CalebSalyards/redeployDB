@@ -36,37 +36,37 @@ webApp.listen(port, () => {
 webApp.use(express.static('public'));
 
 webApp.get('/add-application', (request, result) => {
-    console.log("GET request received.")
+    console.log("GET request received.") (application)
     result.sendFile(__dirname + '/public/add-application.html');
     // result.send("<h1>Welcome, welcome! There's nothing here for now.</h1>");
 });
 
 webApp.get('/add-install-method', (request, result) => {
-    console.log("GET request received.")
+    console.log("GET request received (install).")
     result.sendFile(__dirname + '/public/add-install-method.html');
     // result.send("<h1>Welcome, welcome! There's nothing here for now.</h1>");
 });
 
 webApp.get('/add-registry-info', (request, result) => {
-    console.log("GET request received.")
+    console.log("GET request received (registry).")
     result.sendFile(__dirname + '/public/add-registry-info.html');
     // result.send("<h1>Welcome, welcome! There's nothing here for now.</h1>");
 });
 
 webApp.get('/add-data-location', (request, result) => {
-    console.log("GET request received.")
+    console.log("GET request received (data).")
     result.sendFile(__dirname + '/public/add-data-location.html');
     // result.send("<h1>Welcome, welcome! There's nothing here for now.</h1>");
 });
 
 webApp.get('/add-tag', (request, result) => {
-    console.log("GET request received.")
+    console.log("GET request received (tag).")
     result.sendFile(__dirname + '/public/add-tag.html');
     // result.send("<h1>Welcome, welcome! There's nothing here for now.</h1>");
 });
 
 webApp.get('/search', (request, result) => {
-    console.log("GET request received.")
+    console.log("GET request received (search).")
     result.sendFile(__dirname + '/public/search.html');
     // result.send("<h1>Welcome, welcome! There's nothing here for now.</h1>");
 });
