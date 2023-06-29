@@ -77,6 +77,13 @@ webApp.get('/Robtronika.ttf', (request, result) => {
     // result.send("<h1>Welcome, welcome! There's nothing here for now.</h1>");
 });
 
+webApp.get('*', (request, result) => {
+    //404 Catch-all
+    console.log("Unknown GET request received.")
+    res.status(404).send('Error: 404 not found.');
+    // result.send("<h1>Welcome, welcome! There's nothing here for now.</h1>");
+});
+
 webApp.use(bodyParser.json());
 webApp.use(bodyParser.urlencoded({ extended: false}));
 
