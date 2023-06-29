@@ -36,7 +36,7 @@ webApp.listen(port, () => {
 webApp.use(express.static('public'));
 
 webApp.get('/add-application', (request, result) => {
-    console.log("GET request received.") (application)
+    console.log("GET request received. (application)")
     result.sendFile(__dirname + '/public/add-application.html');
     // result.send("<h1>Welcome, welcome! There's nothing here for now.</h1>");
 });
