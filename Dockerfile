@@ -7,7 +7,6 @@ WORKDIR /usr/app
 COPY package.json /usr/app/
 COPY server.js /usr/app/
 COPY public /usr/app/
-COPY .env /usr/app/
 
 RUN npm install
 
