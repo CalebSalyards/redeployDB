@@ -1,1 +1,1 @@
-sudo docker build -t CalebSalyards/redeployDB:latest .
+sudo docker build -t redeploydb:latest .
