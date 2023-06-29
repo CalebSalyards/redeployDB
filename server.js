@@ -38,50 +38,42 @@ webApp.use(express.static('public'));
 webApp.get('/add-application', (request, result) => {
     console.log("GET request received. (application)")
     result.sendFile(__dirname + '/public/add-application.html');
-    // result.send("<h1>Welcome, welcome! There's nothing here for now.</h1>");
 });
 
 webApp.get('/add-install-method', (request, result) => {
     console.log("GET request received (install).")
     result.sendFile(__dirname + '/public/add-install-method.html');
-    // result.send("<h1>Welcome, welcome! There's nothing here for now.</h1>");
 });
 
 webApp.get('/add-registry-info', (request, result) => {
     console.log("GET request received (registry).")
     result.sendFile(__dirname + '/public/add-registry-info.html');
-    // result.send("<h1>Welcome, welcome! There's nothing here for now.</h1>");
 });
 
 webApp.get('/add-data-location', (request, result) => {
     console.log("GET request received (data).")
     result.sendFile(__dirname + '/public/add-data-location.html');
-    // result.send("<h1>Welcome, welcome! There's nothing here for now.</h1>");
 });
 
 webApp.get('/add-tag', (request, result) => {
     console.log("GET request received (tag).")
     result.sendFile(__dirname + '/public/add-tag.html');
-    // result.send("<h1>Welcome, welcome! There's nothing here for now.</h1>");
 });
 
 webApp.get('/search', (request, result) => {
     console.log("GET request received (search).")
     result.sendFile(__dirname + '/public/search.html');
-    // result.send("<h1>Welcome, welcome! There's nothing here for now.</h1>");
 });
 
 webApp.get('/Robtronika.ttf', (request, result) => {
     console.log("GET request received (font).")
     result.sendFile(__dirname + '/public/Robtronkia.tff');
-    // result.send("<h1>Welcome, welcome! There's nothing here for now.</h1>");
 });
 
 webApp.get('*', (request, result) => {
     //404 Catch-all
     console.log("Unknown GET request received.")
-    res.status(404).send('Error: 404 not found.');
-    // result.send("<h1>Welcome, welcome! There's nothing here for now.</h1>");
+    result.status(404).send('Error: 404 not found.');
 });
 
 webApp.use(bodyParser.json());
