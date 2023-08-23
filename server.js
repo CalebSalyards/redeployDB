@@ -204,6 +204,26 @@ webApp.post('/add-tag', async (request, result) => {
     result.send(resultString + '\n');
 })
 
+webApp.get('/known-programs', async (request, result) => {
+    let body = request.body;
+    mysqlClient.query('SELECT ID, Uninstaller FROM Application;', (error, results, fields) => {
+        if (error) throw error;
+        if (results.length) {
+            output = {}
+            output['header'] = 'Found ' + results.length + ' results for "' + body.query + '"';
+            output['results'] = [];
+            for (var i in results) {
+                output['results'][i] = {};
+                output['results'][i]['ID'] = results[i].ID
+                output['results'][i]['uninstaller'] = results[i].Uninstaller;
+            }
+        } else {
+            output = {}
+            output['header'] = 'No results found for "' + body.query + '"';
+        }
+    });
+});
+
 webApp.post('/search', async (request, result) => {
     let body = request.body;
     let query = mysqlClient.escape('%' + body.query + '%');
