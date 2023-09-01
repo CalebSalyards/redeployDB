@@ -70,6 +70,28 @@ webApp.get('/Robtronika.ttf', (request, result) => {
     result.sendFile(__dirname + '/public/Robtronkia.tff');
 });
 
+webApp.get('/known-programs', async (request, result) => {
+    let body = request.body;
+    mysqlClient.query('SELECT ID, Uninstaller FROM Application;', (error, results, fields) => {
+        if (error) throw error;
+        if (results.length) {
+            output = {}
+            output['header'] = 'Found ' + results.length + ' results for "' + body.query + '"';
+            output['results'] = [];
+            for (var i in results) {
+                output['results'][i] = {};
+                output['results'][i]['ID'] = results[i].ID
+                output['results'][i]['uninstaller'] = results[i].Uninstaller;
+            }
+        } else {
+            result.status(503)
+            output = {}
+            output['header'] = 'No results found for "' + body.query + '"';
+        }
+        result.send(JSON.stringify(output));
+    });
+});
+
 webApp.get('*', (request, result) => {
     //404 Catch-all
     console.log("Unknown GET request received.")
@@ -87,6 +109,7 @@ webApp.post('/add-prog', async (request, result) => {
     let homepage = mysqlClient.escape(body.homepage);
     let version = mysqlClient.escape(body.version);
     let tags = mysqlClient.escape(body.tags);
+    let newID = -1;
     mysqlClient.query('SELECT count(*) AS Duplicates FROM Application WHERE (Name = ?) AND (Uninstaller = ?);', [name, uninstaller], (error, results, fields) => {
         if (error) throw error;
         if ((results[0].Duplicates) && (debugMode == false)) {
@@ -95,11 +118,15 @@ webApp.post('/add-prog', async (request, result) => {
             result.send(resultString);
             return
         }
+        mysqlClient.query('SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = "yourDatabaseName" AND TABLE_NAME = "yourTableName"', (error, results, fields) => {
+            if (error) throw error;
+            newID = results
+        });
         mysqlClient.query('INSERT INTO Application (Name, Uninstaller, Homepage, Version, Tags) VALUES (?, ?, ?, ?, JSON_ARRAY(?));', [name, uninstaller, homepage, version, tags], (error, results, fields) => {
             if (error) throw error;
-                const resultString = "Added " + name + " to the 'Applications' list"
-                console.log(resultString);
-                result.send(resultString + '\n');
+            const resultString = "Added " + name + " to the 'Applications' list (ID: " + newID + ")";
+            console.log(resultString);
+            result.send(resultString + '\n');
             });
     });
 });
@@ -203,26 +230,6 @@ webApp.post('/add-tag', async (request, result) => {
     console.log(resultString);
     result.send(resultString + '\n');
 })
-
-webApp.get('/known-programs', async (request, result) => {
-    let body = request.body;
-    mysqlClient.query('SELECT ID, Uninstaller FROM Application;', (error, results, fields) => {
-        if (error) throw error;
-        if (results.length) {
-            output = {}
-            output['header'] = 'Found ' + results.length + ' results for "' + body.query + '"';
-            output['results'] = [];
-            for (var i in results) {
-                output['results'][i] = {};
-                output['results'][i]['ID'] = results[i].ID
-                output['results'][i]['uninstaller'] = results[i].Uninstaller;
-            }
-        } else {
-            output = {}
-            output['header'] = 'No results found for "' + body.query + '"';
-        }
-    });
-});
 
 webApp.post('/search', async (request, result) => {
     let body = request.body;
