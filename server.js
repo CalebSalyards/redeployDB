@@ -76,7 +76,7 @@ webApp.get('/known-programs', async (request, result) => {
         if (error) throw error;
         if (results.length) {
             output = {}
-            output['header'] = 'Found ' + results.length + ' results for "' + body.query + '"';
+            output['header'] = 'Found ' + results.length + ' known programs.';
             output['results'] = [];
             for (var i in results) {
                 output['results'][i] = {};
@@ -86,7 +86,7 @@ webApp.get('/known-programs', async (request, result) => {
         } else {
             result.status(503)
             output = {}
-            output['header'] = 'No results found for "' + body.query + '"';
+            output['header'] = 'No known programs.';
         }
         result.send(JSON.stringify(output));
     });
