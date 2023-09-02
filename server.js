@@ -123,7 +123,7 @@ webApp.post('/add-prog', async (request, result) => {
             mysqlClient.query('INSERT INTO Application (Name, Uninstaller, Homepage, Version, Tags) VALUES (?, ?, ?, ?, JSON_ARRAY(?));', [name, uninstaller, homepage, version, tags], (error, results, fields) => {
                 if (error) throw error;
                 const resultString = ""
-                mysqlClient.query('SELECT ID AS "newID" FROM Application WHERE Name LIKE %?%', [searchable_name], (error, results, fields) => {
+                mysqlClient.query('SELECT ID AS "newID" FROM Application WHERE Name LIKE ?', [searchable_name], (error, results, fields) => {
                     if (error) throw error;
                     newID = results[0]['newID']
                     resultString = "Added " + name + " to the 'Applications' list (ID: " + newID + ")";
