@@ -118,7 +118,7 @@ webApp.post('/add-prog', async (request, result) => {
             result.send(resultString);
             return
         }
-        mysqlClient.query('SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = "yourDatabaseName" AND TABLE_NAME = "yourTableName"', (error, results, fields) => {
+        mysqlClient.query('SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = "AppData" AND TABLE_NAME = "Application"', (error, results, fields) => {
             if (error) throw error;
             newID = results
         });
