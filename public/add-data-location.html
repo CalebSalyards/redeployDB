@@ -33,10 +33,17 @@
                 Data Location:
                 <span class="tooltip">The location this data is stored at</span>
             </div>
-            <input type="text" name="dataLocation">
+            <input type="text" name="dataLocation" list="validLocations">
+            <datalist id="validLocations">
+                <option value="Local">Local</option>
+                <option value="Roaming">Roaming</option>
+                <option value="Documents">Documents</option>
+                <option value="Saved Games">Saved Games</option>
+                <option value="Other">Other</option>
+            </datalist>
             <div class="hasTooltip">
                 Path:
-                <span class="tooltip">The path of the data relative to the above location</span>
+                <span class="tooltip">The path of the data relative to the above location. For example, a folder called "appName" inside a folder "publisher", located the local Application Data folder, would be entered as "publisher\appName"</span>
             </div>
             <input type="url" name="path">
             <div class="hasTooltip">

@@ -31,12 +31,17 @@
             <input type="text" name="applicationID" required>
             <div class="hasTooltip">
                 Key Location:
-                <span class="tooltip">The location that the registry key is found in</span>
+                <span class="tooltip">The location that the registry key is found in (User, System, or Other). For example, a registry key found in "HKCU:\Software\AppName" would use the "User" option.</span>
             </div>
-            <input type="text" name="keyLocation">
+            <input type="text" name="keyLocation" list="keyTypes">
+            <datalist id="keyTypes">
+                <option value="User">User</option>
+                <option value="System">System</option>
+                <option value="Other">Other</option>
+            </datalist>
             <div class="hasTooltip">
                 Path:
-                <span class="tooltip">The path of the key, relative to the above location</span>
+                <span class="tooltip">The path of the key, relative to the above location.</span>
             </div>
             <input type="url" name="path">
             <input type="submit" value="Submit">
