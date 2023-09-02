@@ -118,17 +118,18 @@ webApp.post('/add-prog', async (request, result) => {
             result.send(resultString);
             return
         }
-        mysqlClient.query('SELECT AUTO_INCREMENT AS "newID" FROM information_schema.TABLES WHERE TABLE_SCHEMA = "AppData" AND TABLE_NAME = "Application"', (error, results, fields) => {
-            if (error) throw error;
-            newID = results[0]['newID'] - 1
-        });
-        mysqlClient.query('INSERT INTO Application (Name, Uninstaller, Homepage, Version, Tags) VALUES (?, ?, ?, ?, JSON_ARRAY(?));', [name, uninstaller, homepage, version, tags], (error, results, fields) => {
-            if (error) throw error;
-            const resultString = "Added " + name + " to the 'Applications' list (ID: " + newID + ")";
-            console.log(resultString);
-            result.send(resultString + '\n');
+        // mysqlClient.query('SELECT AUTO_INCREMENT AS "newID" FROM information_schema.TABLES WHERE TABLE_SCHEMA = "AppData" AND TABLE_NAME = "Application"', (error, results, fields) => {
+            mysqlClient.query('INSERT INTO Application (Name, Uninstaller, Homepage, Version, Tags) VALUES (?, ?, ?, ?, JSON_ARRAY(?));', [name, uninstaller, homepage, version, tags], (error, results, fields) => {
+                if (error) throw error;
+                mysqlClient.query('SELECT ID AS "newID" FROM Application WHERE Name = ?', [name], (error, results, fields) => {
+                    if (error) throw error;
+                    newID = results[0]['newID'] - 1
+                });
+                const resultString = "Added " + name + " to the 'Applications' list (ID: " + newID + ")";
+                console.log(resultString);
+                result.send(resultString + '\n');
             });
-    });
+        });
 });
 
 webApp.post('/add-install-method', async (request, result) => {
