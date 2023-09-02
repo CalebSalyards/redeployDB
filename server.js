@@ -127,9 +127,9 @@ webApp.post('/add-prog', async (request, result) => {
                     if (error) throw error;
                     newID = results[0]['newID']
                     resultString = "Added " + name + " to the 'Applications' list (ID: " + newID + ")";
+                    console.log(resultString);
+                    result.send(resultString + '\n');
                 });
-                console.log(resultString);
-                result.send(resultString + '\n');
             });
         });
 });
