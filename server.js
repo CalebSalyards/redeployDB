@@ -120,7 +120,7 @@ webApp.post('/add-prog', async (request, result) => {
         }
         mysqlClient.query('SELECT AUTO_INCREMENT AS "newID" FROM information_schema.TABLES WHERE TABLE_SCHEMA = "AppData" AND TABLE_NAME = "Application"', (error, results, fields) => {
             if (error) throw error;
-            newID = results.newID - 1
+            newID = results[0]['newID'] - 1
         });
         mysqlClient.query('INSERT INTO Application (Name, Uninstaller, Homepage, Version, Tags) VALUES (?, ?, ?, ?, JSON_ARRAY(?));', [name, uninstaller, homepage, version, tags], (error, results, fields) => {
             if (error) throw error;
