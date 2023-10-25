@@ -70,7 +70,7 @@ webApp.get('/Robtronika.ttf', (request, result) => {
     result.sendFile(__dirname + '/public/Robtronkia.tff');
 });
 
-webApp.get('/known-programs', async (request, result) => {
+webApp.get('/api/known-programs', async (request, result) => {
     let body = request.body;
     mysqlClient.query('SELECT ID, Uninstaller FROM Application;', (error, results, fields) => {
         if (error) throw error;
@@ -80,7 +80,7 @@ webApp.get('/known-programs', async (request, result) => {
             output['results'] = [];
             for (var i in results) {
                 output['results'][i] = {};
-                output['results'][i]['ID'] = results[i].ID
+                output['results'][i]['ID'] = results[i].ID;
                 output['results'][i]['uninstaller'] = results[i].Uninstaller;
             }
         } else {
@@ -89,6 +89,41 @@ webApp.get('/known-programs', async (request, result) => {
             output['header'] = 'No known programs.';
         }
         result.send(JSON.stringify(output));
+    });
+});
+
+webApp.get('/api/known-folders', async (request, result) => {
+    mysqlClient.query('SELECT ApplicationID, DataLocation, Path, Folder FROM ApplicationData;', (error, results, fields) => {
+        if (error) throw error;
+        if (results.length) {
+            output = {}
+            output['header'] = 'Found' + result.length + ' known folders.';
+            output['results'] = [];
+            for (var i in results) {
+                output['results'][i] = {};
+                output['results'][i]['ApplicationID'] = results[i].ApplicationID;
+                output['results'][i]['DataLocation'] = results[i].DataLocation;
+                output['results'][i]['Path'] = results[i].Path;
+                output['results'][i]['Folder'] = results[i].Folder;
+            }
+        }
+    });
+});
+
+webApp.get('/api/known-registries', async (request, result) => {
+    mysqlClient.query('SELECT ApplicationID, KeyLocation, Path FROM RegistryEntries;', (error, results, fields) => {
+        if (error) throw error;
+        if (results.length) {
+            output = {}
+            output['header'] = 'Found' + result.length + ' known folders.';
+            output['results'] = [];
+            for (var i in results) {
+                output['results'][i] = {};
+                output['results'][i]['ApplicationID'] = results[i].ApplicationID;
+                output['results'][i]['KeyLocation'] = results[i].KeyLocation;
+                output['results'][i]['Path'] = results[i].Path;
+            }
+        }
     });
 });
 
