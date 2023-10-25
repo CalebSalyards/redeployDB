@@ -105,6 +105,7 @@ webApp.post('/add-prog', async (request, result) => {
     console.log("POST request received at /add-prog");
     let body = request.body;
     let name = mysqlClient.escape(body.name);
+    let searchable_name = mysqlClient.escape("%" + body.name + "%")
     let uninstaller = mysqlClient.escape(body.uninstaller);
     let homepage = mysqlClient.escape(body.homepage);
     let version = mysqlClient.escape(body.version);
@@ -118,17 +119,19 @@ webApp.post('/add-prog', async (request, result) => {
             result.send(resultString);
             return
         }
-        mysqlClient.query('SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = "yourDatabaseName" AND TABLE_NAME = "yourTableName"', (error, results, fields) => {
-            if (error) throw error;
-            newID = results
-        });
-        mysqlClient.query('INSERT INTO Application (Name, Uninstaller, Homepage, Version, Tags) VALUES (?, ?, ?, ?, JSON_ARRAY(?));', [name, uninstaller, homepage, version, tags], (error, results, fields) => {
-            if (error) throw error;
-            const resultString = "Added " + name + " to the 'Applications' list (ID: " + newID + ")";
-            console.log(resultString);
-            result.send(resultString + '\n');
+        // mysqlClient.query('SELECT AUTO_INCREMENT AS "newID" FROM information_schema.TABLES WHERE TABLE_SCHEMA = "AppData" AND TABLE_NAME = "Application"', (error, results, fields) => {
+            mysqlClient.query('INSERT INTO Application (Name, Uninstaller, Homepage, Version, Tags) VALUES (?, ?, ?, ?, JSON_ARRAY(?));', [name, uninstaller, homepage, version, tags], (error, results, fields) => {
+                if (error) throw error;
+                let resultString = ""
+                mysqlClient.query('SELECT ID AS "newID" FROM Application WHERE Name LIKE ?', [searchable_name], (error, results, fields) => {
+                    if (error) throw error;
+                    newID = results[0]['newID']
+                    resultString = "Added " + name + " to the 'Applications' list (ID: " + newID + ")";
+                    console.log(resultString);
+                    result.send(resultString + '\n');
+                });
             });
-    });
+        });
 });
 
 webApp.post('/add-install-method', async (request, result) => {

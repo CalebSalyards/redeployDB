@@ -33,7 +33,12 @@
                 Install Method:
                 <span class="tooltip">The category of method this entry denotes</span>
             </div>
-            <input type="text" name="installMethod">
+            <input type="text" name="installMethod" list="installMethods">
+            <datalist id="installMethods">
+                <option value="WinGet">WinGet</option>
+                <option value="Automated">Automated</option>
+                <option value="Manual">Manual</option>
+            </datalist>
             <div class="hasTooltip">
                 Location:
                 <span class="tooltip">The location of the installer. (Either a URL or the WinGet ID)</span>
@@ -41,7 +46,7 @@
             <input type="text" name="location" required>
             <div class="hasTooltip">
                 Silent Flag:
-                <span class="tooltip">The command line flag to install the application silently</span>
+                <span class="tooltip">The command line flag to install the application silently. Only necessary for Automated and Manual, as WinGet is silent by default.</span>
             </div>
             <input type="text" name="silentFlag">
             <div class="hasTooltip">
