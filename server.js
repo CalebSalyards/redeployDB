@@ -106,7 +106,12 @@ webApp.get('/api/known-folders', async (request, result) => {
                 output['results'][i]['Path'] = results[i].Path;
                 output['results'][i]['Folder'] = results[i].Folder;
             }
+        } else {
+            result.status(503)
+            output = {}
+            output['header'] = 'No known programs.';
         }
+        result.send(JSON.stringify(output));
     });
 });
 
@@ -123,7 +128,12 @@ webApp.get('/api/known-registries', async (request, result) => {
                 output['results'][i]['KeyLocation'] = results[i].KeyLocation;
                 output['results'][i]['Path'] = results[i].Path;
             }
+        } else {
+            result.status(503)
+            output = {}
+            output['header'] = 'No known programs.';
         }
+        result.send(JSON.stringify(output));
     });
 });
 
