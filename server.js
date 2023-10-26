@@ -129,7 +129,8 @@ webApp.get('/api/known-registries', async (request, result) => {
 
 webApp.get('*', (request, result) => {
     //404 Catch-all
-    console.log("Unknown GET request received.")
+    stamp = new Date().toLocaleString()
+    console.log("Unknown GET request received at " + stamp + ": " + request.url)
     result.status(404).send('Error: 404 not found.');
 });
 
