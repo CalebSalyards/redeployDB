@@ -80,8 +80,7 @@ webApp.get('/api/known-programs', async (request, result) => {
             output['results'] = [];
             for (var i in results) {
                 output['results'][i] = {};
-                output['results'][i]['ID'] = results[i].ID;
-                output['results'][i]['uninstaller'] = results[i].Uninstaller;
+                output['results'][i]['name'] = results[i].Uninstaller;
             }
         } else {
             result.status(503)
@@ -92,7 +91,7 @@ webApp.get('/api/known-programs', async (request, result) => {
     });
 });
 
-webApp.get('/api/known-folders', async (request, result) => {
+webApp.get('/api/known-data', async (request, result) => {
     mysqlClient.query('SELECT ApplicationID, DataLocation, Path, Folder FROM ApplicationData;', (error, results, fields) => {
         if (error) throw error;
         if (results.length) {
@@ -101,7 +100,6 @@ webApp.get('/api/known-folders', async (request, result) => {
             output['results'] = [];
             for (var i in results) {
                 output['results'][i] = {};
-                output['results'][i]['ApplicationID'] = results[i].ApplicationID;
                 output['results'][i]['DataLocation'] = results[i].DataLocation;
                 output['results'][i]['Path'] = results[i].Path;
                 output['results'][i]['Folder'] = results[i].Folder;
@@ -109,7 +107,7 @@ webApp.get('/api/known-folders', async (request, result) => {
         } else {
             result.status(503)
             output = {}
-            output['header'] = 'No known programs.';
+            output['header'] = 'No known data locations.';
         }
         result.send(JSON.stringify(output));
     });
@@ -124,14 +122,13 @@ webApp.get('/api/known-registries', async (request, result) => {
             output['results'] = [];
             for (var i in results) {
                 output['results'][i] = {};
-                output['results'][i]['ApplicationID'] = results[i].ApplicationID;
                 output['results'][i]['KeyLocation'] = results[i].KeyLocation;
                 output['results'][i]['Path'] = results[i].Path;
             }
         } else {
             result.status(503)
             output = {}
-            output['header'] = 'No known programs.';
+            output['header'] = 'No known registry entries.';
         }
         result.send(JSON.stringify(output));
     });
