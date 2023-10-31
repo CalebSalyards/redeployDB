@@ -34,6 +34,7 @@ CREATE TABLE RegistryEntries (
         'Other'
         ) NOT NULL,
     Path TEXT(65535) NOT NULL,
+    Folder BOOL NOT NULL,
     PRIMARY KEY (ID),
     FOREIGN KEY (ApplicationID)
         REFERENCES Application(ID)

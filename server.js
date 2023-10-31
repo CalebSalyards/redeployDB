@@ -224,7 +224,8 @@ webApp.post('/add-registry-info', async (request, result) => {
             return;
     }
 	let path = mysqlClient.escape(body.path);
-    mysqlClient.query('INSERT INTO RegistryEntries (ApplicationID, KeyLocation, Path) VALUES (?, ?, ?);', [applicationID, keyLocation, path], (error, results, fields) => {
+    let folder = mysqlClient.escape(body.folder)
+    mysqlClient.query('INSERT INTO RegistryEntries (ApplicationID, KeyLocation, Path) VALUES (?, ?, ?, ?);', [applicationID, keyLocation, path, folder], (error, results, fields) => {
         if (error) throw error;
     });
     const resultString = "Added a " + keyLocation + " option to the 'Registry' list"
