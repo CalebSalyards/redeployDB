@@ -4,12 +4,17 @@ const mysql = require('mysql2');
 const dotenv = require('dotenv').config();
 
 const webApp = express();
+webApp.set('trust proxy', true);
+
 const port = 9000;
 const mysqlClient = mysql.createConnection({
     host: process.env.HOST,
     user: process.env.USER,
     password: process.env.PASSWORD
 });
+
+const fs = require('fs');
+const rick = fs.readFileSync('rick').toString().split("\n");
 
 const debugMode = false;
 const toRed = '\x1b[31m'
@@ -137,8 +142,14 @@ webApp.get('/api/known-registries', async (request, result) => {
 webApp.get('*', (request, result) => {
     //404 Catch-all
     stamp = new Date().toLocaleString()
-    console.log("Unknown GET request received at " + stamp + ": " + request.url)
-    result.status(404).send('Error: 404 not found.');
+    if (rick.includes(request.url)) {
+        result.status(301);
+        result.redirect("https://youtu.be/dQw4w9WgXcQ?t=43s");
+        console.log("Rickroll sent at " + stamp + " to " + request.ip);
+    } else {
+        console.log("Unknown GET request received at " + stamp + ": " + request.url)
+        result.status(404).send('Error: 404 not found.');
+    }
 });
 
 webApp.use(bodyParser.json());
