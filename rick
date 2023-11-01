@@ -127,7 +127,6 @@
 /administrator/db/index.php?lang=en
 /administrator/phpMyAdmin/index.php?lang=en
 /api/known-data
-/favicon.ico
 /geoserver/web/
 /druid/index.html
 /.env
@@ -135,8 +134,6 @@
 /actuator/gateway/routes
 /systembc/password.php
 /hudson
-/favicon.ico/
-/robots.txt
 /.well-known/security.txt
 /portal/redlion
 /.git/config

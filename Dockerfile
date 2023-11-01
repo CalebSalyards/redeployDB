@@ -6,6 +6,7 @@ WORKDIR /usr/app
 
 COPY package.json /usr/app/
 COPY server.js /usr/app/
+COPY rick /usr/app/
 COPY public /usr/app/public/
 
 RUN npm install
