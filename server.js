@@ -141,13 +141,14 @@ webApp.get('/api/known-registries', async (request, result) => {
 
 webApp.get('*', (request, result) => {
     //404 Catch-all
-    stamp = new Date().toLocaleString()
-    if (rick.includes(request.url)) {
+    let stamp = new Date().toLocaleString()
+    let client = request.ip.split(":").pop()
+    if (rick.some(rick_url => rick_url.startsWith(request.url))) {
         result.status(301);
         result.redirect("https://youtu.be/dQw4w9WgXcQ?t=43s");
-        console.log("Rickroll sent at " + stamp + " to " + request.ip);
+        console.log(stamp + " | " + client + ": Rickroll sent to client");
     } else {
-        console.log("Unknown GET request received at " + stamp + ": " + request.url)
+        console.log(stamp + " | " + client + ": Unknown GET request received: " + request.url)
         result.status(404).send('Error: 404 not found.');
     }
 });

