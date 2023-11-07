@@ -7,11 +7,24 @@ const webApp = express();
 webApp.set('trust proxy', true);
 
 const port = 9000;
-const mysqlClient = mysql.createConnection({
+// const mysqlClient = mysql.createConnection({
+//     host: process.env.HOST,
+//     user: process.env.USER,
+//     password: process.env.PASSWORD
+// });
+const mysqlClient = mysql.createPool({
     host: process.env.HOST,
     user: process.env.USER,
-    password: process.env.PASSWORD
-});
+    password: process.env.PASSWORD,
+    database: 'AppData',
+    waitForConnections: true,
+    connectionLimit: 10,
+    maxIdle: 10, // max idle connections, the default value is the same as `connectionLimit`
+    idleTimeout: 60000, // idle connections timeout, in milliseconds, the default value 60000
+    queueLimit: 0,
+    enableKeepAlive: true,
+    keepAliveInitialDelay: 0
+  });
 
 const fs = require('fs');
 const rick = fs.readFileSync('rick').toString().split("\n");
@@ -34,7 +47,7 @@ webApp.listen(port, () => {
             console.log("Connected to MySQL Server");
         }
     });
-    mysqlClient.query('USE AppData;')
+    // mysqlClient.query('USE AppData;')
     console.log("Listening on port: " + port);
 });
 
