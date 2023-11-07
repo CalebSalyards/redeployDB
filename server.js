@@ -68,41 +68,56 @@ webApp.listen(port, () => {
 webApp.use(express.static('public'));
 
 webApp.get('/add-application', (request, result) => {
-    console.log("GET request received. (application)")
+    let client = request.ip.split(":").pop()
+    let stamp = new Date().toLocaleString()
+    console.log(stamp + " | " + client + ": GET request received. (application)")
     result.sendFile(__dirname + '/public/add-application.html');
 });
 
 webApp.get('/add-install-method', (request, result) => {
-    console.log("GET request received (install).")
+    let client = request.ip.split(":").pop()
+    let stamp = new Date().toLocaleString()
+    console.log(stamp + " | " + client + ": GET request received (install).")
     result.sendFile(__dirname + '/public/add-install-method.html');
 });
 
 webApp.get('/add-registry-info', (request, result) => {
-    console.log("GET request received (registry).")
+    let client = request.ip.split(":").pop()
+    let stamp = new Date().toLocaleString()
+    console.log(stamp + " | " + client + ": GET request received (registry).")
     result.sendFile(__dirname + '/public/add-registry-info.html');
 });
 
 webApp.get('/add-data-location', (request, result) => {
-    console.log("GET request received (data).")
+    let client = request.ip.split(":").pop()
+    let stamp = new Date().toLocaleString()
+    console.log(stamp + " | " + client + ": GET request received (data).")
     result.sendFile(__dirname + '/public/add-data-location.html');
 });
 
 webApp.get('/add-tag', (request, result) => {
-    console.log("GET request received (tag).")
+    let client = request.ip.split(":").pop()
+    let stamp = new Date().toLocaleString()
+    console.log(stamp + " | " + client + ": GET request received (tag).")
     result.sendFile(__dirname + '/public/add-tag.html');
 });
 
 webApp.get('/search', (request, result) => {
-    console.log("GET request received (search).")
+    let client = request.ip.split(":").pop()
+    let stamp = new Date().toLocaleString()
+    console.log(stamp + " | " + client + ": GET request received (search).")
     result.sendFile(__dirname + '/public/search.html');
 });
 
 webApp.get('/Robtronika.ttf', (request, result) => {
-    console.log("GET request received (font).")
+    let client = request.ip.split(":").pop()
+    let stamp = new Date().toLocaleString()
+    console.log(stamp + " | " + client + ": GET request received (font).")
     result.sendFile(__dirname + '/public/Robtronkia.tff');
 });
 
 webApp.get('/api/known-programs', async (request, result) => {
+    let client = request.ip.split(":").pop()
     let body = request.body;
     mysqlClient.query('SELECT ID, Uninstaller FROM Application;', (error, results, fields) => {
         if (error) throw error;
@@ -124,6 +139,7 @@ webApp.get('/api/known-programs', async (request, result) => {
 });
 
 webApp.get('/api/known-data', async (request, result) => {
+    let client = request.ip.split(":").pop()
     mysqlClient.query('SELECT ApplicationID, DataLocation, Path, Folder FROM ApplicationData;', (error, results, fields) => {
         if (error) throw error;
         if (results.length) {
@@ -146,6 +162,7 @@ webApp.get('/api/known-data', async (request, result) => {
 });
 
 webApp.get('/api/known-registries', async (request, result) => {
+    let client = request.ip.split(":").pop()
     mysqlClient.query('SELECT ApplicationID, KeyLocation, Path FROM RegistryEntries;', (error, results, fields) => {
         if (error) throw error;
         if (results.length) {
