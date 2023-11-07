@@ -34,20 +34,34 @@ const toRed = '\x1b[31m'
 const toWhite = '\x1b[0m'
 
 webApp.listen(port, () => {
-    mysqlClient.connect((error) => {
-        console.log("Connecting to Database...");
-        if (error) {
-            if (error.code == 'ECONNREFUSED') {
-                console.log(toRed + 'The database appears to be turned off.' + toWhite);
-                process.exit()
-            } else {
-                throw error;
-            }
-        } else {
-            console.log("Connected to MySQL Server");
-        }
-    });
+    // mysqlClient.connect((error) => {
+    //     console.log("Connecting to Database...");
+    //     if (error) {
+    //         if (error.code == 'ECONNREFUSED') {
+    //             console.log(toRed + 'The database appears to be turned off.' + toWhite);
+    //             process.exit()
+    //         } else {
+    //             throw error;
+    //         }
+    //     } else {
+    //         console.log("Connected to MySQL Server");
+    //     }
+    // });
     // mysqlClient.query('USE AppData;')
+    console.log("Testing database connection")
+    mysqlClient.getConnection(function(err, client) {
+        // Do something with the connection
+        client.query('SELECT "Testing_Connection";', (error, results, fields) => {
+            if (error) throw error;
+            if (results.length == 1) {
+                console.log('Database test successful.')
+            } else {
+                console.log(toRed + 'Database returned undesirable data:\n' + results + toWhite)
+            }
+        });
+        // Don't forget to release the connection when finished!
+        mysqlClient.releaseConnection(client);
+    });
     console.log("Listening on port: " + port);
 });
 
