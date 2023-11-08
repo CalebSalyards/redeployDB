@@ -126,7 +126,6 @@
 /phpMyAdmin_/index.php?lang=en
 /administrator/db/index.php?lang=en
 /administrator/phpMyAdmin/index.php?lang=en
-/api/known-data
 /geoserver/web/
 /druid/index.html
 /.env
