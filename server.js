@@ -210,7 +210,7 @@ webApp.post('/add-prog', async (request, result) => {
     let version = mysqlClient.escape(body.version);
     let tags = mysqlClient.escape(body.tags);
     let newID = -1;
-    mysqlClient.query('SELECT count(*) AS Duplicates FROM Application WHERE (Name = ?) AND (Uninstaller = ?);', [name, uninstaller], (error, results, fields) => {
+    mysqlClient.execute('SELECT count(*) AS Duplicates FROM Application WHERE (Name = ?) AND (Uninstaller = ?);', [name, uninstaller], (error, results, fields) => {
         if (error) throw error;
         if ((results[0].Duplicates) && (debugMode == false)) {
             const resultString = 'An Application under the name ' + name + ' with the uninstaller name of ' + uninstaller + ' already exists.';
@@ -219,18 +219,21 @@ webApp.post('/add-prog', async (request, result) => {
             return
         }
         // mysqlClient.query('SELECT AUTO_INCREMENT AS "newID" FROM information_schema.TABLES WHERE TABLE_SCHEMA = "AppData" AND TABLE_NAME = "Application"', (error, results, fields) => {
-            mysqlClient.query('INSERT INTO Application (Name, Uninstaller, Homepage, Version, Tags) VALUES (?, ?, ?, ?, JSON_ARRAY(?));', [name, uninstaller, homepage, version, tags], (error, results, fields) => {
+            mysqlClient.execute('INSERT INTO Application (Name, Uninstaller, Homepage, Version, Tags) VALUES (?, ?, ?, ?, JSON_ARRAY(?));', [name, uninstaller, homepage, version, tags], (error, results, fields) => {
                 if (error) throw error;
                 let resultString = ""
-                mysqlClient.query('SELECT ID AS "newID" FROM Application WHERE Name LIKE ?', [searchable_name], (error, results, fields) => {
+                mysqlClient.execute('SELECT ID AS "newID" FROM Application WHERE Name LIKE ?', [searchable_name], (error, results, fields) => {
                     if (error) throw error;
                     newID = results[0]['newID']
                     resultString = "Added " + name + " to the 'Applications' list (ID: " + newID + ")";
                     console.log(resultString);
                     result.send(resultString + '\n');
                 });
+                mysqlClient.unprepare('SELECT ID AS "newID" FROM Application WHERE Name LIKE ?');
             });
+            mysqlClient.unprepare('INSERT INTO Application (Name, Uninstaller, Homepage, Version, Tags) VALUES (?, ?, ?, ?, JSON_ARRAY(?));');
         });
+        mysqlClient.unprepare('SELECT count(*) AS Duplicates FROM Application WHERE (Name = ?) AND (Uninstaller = ?);');
 });
 
 webApp.post('/add-install-method', async (request, result) => {
@@ -254,9 +257,10 @@ webApp.post('/add-install-method', async (request, result) => {
 	let location = mysqlClient.escape(body.location);
 	let silentFlag = mysqlClient.escape(body.silentFlag);
 	let pathFlag = mysqlClient.escape(body.pathFlag);
-    mysqlClient.query('INSERT INTO InstallMethod (ApplicationID, InstallMethod, Location, SilentFlag, PathFlag) VALUES (?, ?, ?, ?, ?);', [applicationID, installMethod, location, silentFlag, pathFlag], (error, results, fields) => {
+    mysqlClient.execute('INSERT INTO InstallMethod (ApplicationID, InstallMethod, Location, SilentFlag, PathFlag) VALUES (?, ?, ?, ?, ?);', [applicationID, installMethod, location, silentFlag, pathFlag], (error, results, fields) => {
         if (error) throw error;
     });
+    mysqlClient.unprepare('INSERT INTO InstallMethod (ApplicationID, InstallMethod, Location, SilentFlag, PathFlag) VALUES (?, ?, ?, ?, ?);');
     const resultString = "Added a " + installMethod + " option to the 'Install Methods' list"
     console.log(resultString);
     result.send(resultString + '\n');
@@ -282,9 +286,10 @@ webApp.post('/add-registry-info', async (request, result) => {
 	let path = mysqlClient.escape(body.path);
     console.log(body.path + " --> " + path)
     let folder = mysqlClient.escape(body.folder);
-    mysqlClient.query('INSERT INTO RegistryEntries (ApplicationID, KeyLocation, Path, Folder) VALUES (?, ?, ?, ?);', [applicationID, keyLocation, path, folder], (error, results, fields) => {
+    mysqlClient.execute('INSERT INTO RegistryEntries (ApplicationID, KeyLocation, Path, Folder) VALUES (?, ?, ?, ?);', [applicationID, keyLocation, path, folder], (error, results, fields) => {
         if (error) throw error;
     });
+    mysqlClient.unprepare('INSERT INTO RegistryEntries (ApplicationID, KeyLocation, Path, Folder) VALUES (?, ?, ?, ?);');
     const resultString = "Added a " + keyLocation + " option to the 'Registry' list"
     console.log(resultString);
     result.send(resultString + '\n');
@@ -315,9 +320,10 @@ webApp.post('/add-data-location', async (request, result) => {
     }
 	let path = mysqlClient.escape(body.path);
 	let folder = mysqlClient.escape(body.folder);
-    mysqlClient.query('INSERT INTO ApplicationData (ApplicationID, DataLocation, Path, Folder) VALUES (?, ?, ?, ?);', [applicationID, dataLocation, path, folder], (error, results, fields) => {
+    mysqlClient.execute('INSERT INTO ApplicationData (ApplicationID, DataLocation, Path, Folder) VALUES (?, ?, ?, ?);', [applicationID, dataLocation, path, folder], (error, results, fields) => {
         if (error) throw error;
     });
+    mysqlClient.unprepare('INSERT INTO ApplicationData (ApplicationID, DataLocation, Path, Folder) VALUES (?, ?, ?, ?);');
     const resultString = "Added a location in " + dataLocation + " option to the 'Application Data' list"
     console.log(resultString);
     result.send(resultString + '\n');
@@ -327,9 +333,10 @@ webApp.post('/add-tag', async (request, result) => {
     let body = request.body;
     let applicationID = mysqlClient.escape(body.applicationID);
     let newTag = mysqlClient.escape(body.newTag);
-    mysqlClient.query('UPDATE Application SET tags = JSON_ARRAY_APPEND(tags, "$", ?) WHERE ID = ?;', [newTag, applicationID], (error, results, fields) => {
+    mysqlClient.execute('UPDATE Application SET tags = JSON_ARRAY_APPEND(tags, "$", ?) WHERE ID = ?;', [newTag, applicationID], (error, results, fields) => {
         if (error) throw error;
     });
+    mysqlClient.unprepare('UPDATE Application SET tags = JSON_ARRAY_APPEND(tags, "$", ?) WHERE ID = ?;');
     const resultString = "Added tag: " + newTag + " to the list"
     console.log(resultString);
     result.send(resultString + '\n');
@@ -339,7 +346,7 @@ webApp.post('/search', async (request, result) => {
     let body = request.body;
     let query = mysqlClient.escape('%' + body.query + '%');
     console.log(body.query)
-    mysqlClient.query('SELECT ID, Name, Uninstaller FROM Application WHERE (Name LIKE ?) OR (Uninstaller LIKE ?) OR (JSON_SEARCH(Tags, "one", ?));', [query, query, query], (error, results, fields) => {
+    mysqlClient.execute('SELECT ID, Name, Uninstaller FROM Application WHERE (Name LIKE ?) OR (Uninstaller LIKE ?) OR (JSON_SEARCH(Tags, "one", ?));', [query, query, query], (error, results, fields) => {
         if (error) throw error;
         if (results.length) {
             output = {}
@@ -357,6 +364,7 @@ webApp.post('/search', async (request, result) => {
         console.log(JSON.stringify(output));
         result.send(JSON.stringify(output));
     });
+    mysqlClient.unprepare('SELECT ID, Name, Uninstaller FROM Application WHERE (Name LIKE ?) OR (Uninstaller LIKE ?) OR (JSON_SEARCH(Tags, "one", ?));');
     // mysqlClient.query('SELECT ID, Name, Uninstaller FROM Application WHERE (Name LIKE ?) OR (Uninstaller LIKE ?) OR (JSON_SEARCH(Tags, "one", ?));', [query, query, query], (error, results, fields) => {
     //     if (error) throw error;
     //     if (results.length) {
