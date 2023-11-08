@@ -144,7 +144,7 @@ webApp.get('/api/known-data', async (request, result) => {
         if (error) throw error;
         if (results.length) {
             output = {}
-            output['header'] = 'Found' + result.length + ' known folders.';
+            output['header'] = 'Found' + results.length + ' known folders.';
             output['results'] = [];
             for (var i in results) {
                 output['results'][i] = {};
@@ -167,7 +167,7 @@ webApp.get('/api/known-registries', async (request, result) => {
         if (error) throw error;
         if (results.length) {
             output = {}
-            output['header'] = 'Found' + result.length + ' known folders.';
+            output['header'] = 'Found' + results.length + ' known folders.';
             output['results'] = [];
             for (var i in results) {
                 output['results'][i] = {};
