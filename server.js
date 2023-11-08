@@ -187,7 +187,7 @@ webApp.get('*', (request, result) => {
     //404 Catch-all
     let stamp = new Date().toLocaleString()
     let client = request.ip.split(":").pop()
-    if (rick.some(rick_url => rick_url.startsWith(request.url))) {
+    if (rick.some(rick_url => request.url.startsWith(rick_url))) {
         result.status(301);
         result.redirect("https://youtu.be/dQw4w9WgXcQ?t=43s");
         console.log(stamp + " | " + client + ": Rickroll sent to client");
