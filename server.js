@@ -280,7 +280,7 @@ webApp.post('/add-registry-info', async (request, result) => {
             return;
     }
 	let path = mysqlClient.escape(body.path);
-    console.log(path)
+    console.log(body.path + "-->" + path)
     let folder = mysqlClient.escape(body.folder);
     mysqlClient.query('INSERT INTO RegistryEntries (ApplicationID, KeyLocation, Path, Folder) VALUES (?, ?, ?, ?);', [applicationID, keyLocation, path, folder], (error, results, fields) => {
         if (error) throw error;
