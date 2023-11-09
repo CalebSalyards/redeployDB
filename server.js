@@ -365,22 +365,29 @@ webApp.post('/add-tag', async (request, result) => {
 
 function search(query) {
     query = '%' + query + '%'
+    console.log('Running app search for: ' + query);
     mysqlClient.execute('SELECT ID, Name, Uninstaller FROM Application WHERE (Name LIKE ?) OR (Uninstaller LIKE ?) OR (JSON_SEARCH(Tags, "one", ?));', [query, query, query], (error, results, fields) => {
         if (error) throw error;
+        output = {}
         if (results.length) {
-            output = {}
+            console.log('Found results for "' + query + '" search.')
             output['header'] = 'Found ' + results.length + ' results for "' + body.query + '"';
             output['results'] = [];
+            console.log('Output structure: ' + output);
             for (var i in results) {
+                console.log('Adding "' + i + '" to output results');
                 output['results'][i] = {};
+                console.log('Adding "' + i['ID'] + '" to output results');
                 output['results'][i]['ID'] = results[i].ID
+                console.log('Adding "' + i['name'] + '" to output results');
                 output['results'][i]['name'] = results[i].Name;
             }
-            return output;
+            console.log('Test output (output.results.0.name): "' + output['results'][i]['name'] + '"');
         } else {
             output = {}
             output['header'] = 'No results found for "' + body.query + '"';
         }
+        return output;
     });
 }
 
