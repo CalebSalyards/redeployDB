@@ -350,7 +350,7 @@ webApp.post('/add-tag', async (request, result) => {
     let applicationID = body.applicationID;
     if (applicationID === undefined) {
         console.log("No ID specified. Searching database for: " + name)
-        applicationID = await search(name); //['results'][0]['ID'];
+        applicationID = await search(name)['results'][0]['ID'];
     }
     let newTag = body.newTag;
     console.log(applicationID)
@@ -414,7 +414,7 @@ function search(query) {
                     console.log('Adding "' + i['name'] + '" to output results');
                     output['results'][i]['name'] = results[i].Name;
                 }
-                console.log('Test output (output.results.0.name): "' + output['results'][i]['name'] + '"');
+                console.log('Test output (output.results.0.name): "' + output['results'][i]['ID'] + '"');
             } else {
                 output = {}
                 output['header'] = 'No results found for "' + query + '"';
