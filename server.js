@@ -372,12 +372,12 @@ function search(query) {
                 output['results'][i]['ID'] = results[i].ID
                 output['results'][i]['name'] = results[i].Name;
             }
+            return output;
         } else {
             output = {}
             output['header'] = 'No results found for "' + body.query + '"';
         }
     });
-    return output;
 }
 
 webApp.post('/search', async (request, result) => {
