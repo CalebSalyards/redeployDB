@@ -240,7 +240,8 @@ webApp.post('/add-install-method', async (request, result) => {
     let body = request.body;
     let name = request.name;
     let applicationID = body.applicationID;
-    if (typeof applicationID == 'undefined') {
+    if (applicationID === undefined) {
+        console.log("No ID specified. Searching database for: " + name)
         applicationID = search(name)['results'][0]['ID'];
     }
     let installMethod = "";
@@ -274,7 +275,7 @@ webApp.post('/add-registry-info', async (request, result) => {
     let body = request.body;
     let name = request.name;
     let applicationID = body.applicationID;
-    if (typeof applicationID == 'undefined') {
+    if (applicationID === undefined) {
         console.log("No ID specified. Searching database for: " + name)
         applicationID = search(name)['results'][0]['ID'];
     }
@@ -308,7 +309,8 @@ webApp.post('/add-data-location', async (request, result) => {
     let body = request.body;
     let name = request.name;
     let applicationID = body.applicationID;
-    if (typeof applicationID == 'undefined') {
+    if (applicationID === undefined) {
+        console.log("No ID specified. Searching database for: " + name)
         applicationID = search(name)['results'][0]['ID'];
     }
     switch(body.dataLocation) {
@@ -346,7 +348,8 @@ webApp.post('/add-tag', async (request, result) => {
     let body = request.body;
     let name = request.name;
     let applicationID = body.applicationID;
-    if (typeof applicationID == 'undefined') {
+    if (applicationID === undefined) {
+        console.log("No ID specified. Searching database for: " + name)
         applicationID = search(name); //['results'][0]['ID'];
     }
     let newTag = body.newTag;
