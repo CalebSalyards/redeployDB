@@ -203,12 +203,12 @@ webApp.use(bodyParser.urlencoded({ extended: false}));
 webApp.post('/add-prog', async (request, result) => {
     console.log("POST request received at /add-prog");
     let body = request.body;
-    let name = mysqlClient.escape(body.name);
-    let searchable_name = mysqlClient.escape("%" + body.name + "%")
-    let uninstaller = mysqlClient.escape(body.uninstaller);
-    let homepage = mysqlClient.escape(body.homepage);
-    let version = mysqlClient.escape(body.version);
-    let tags = mysqlClient.escape(body.tags);
+    let name = body.name;
+    let searchable_name = "%" + body.name + "%";
+    let uninstaller = body.uninstaller;
+    let homepage = body.homepage;
+    let version = body.version;
+    let tags = body.tags;
     let newID = -1;
     mysqlClient.execute('SELECT count(*) AS Duplicates FROM Application WHERE (Name = ?) AND (Uninstaller = ?);', [name, uninstaller], (error, results, fields) => {
         if (error) throw error;
@@ -238,7 +238,7 @@ webApp.post('/add-prog', async (request, result) => {
 
 webApp.post('/add-install-method', async (request, result) => {
     let body = request.body;
-    let applicationID = mysqlClient.escape(body.applicationID);
+    let applicationID = body.applicationID;
     let installMethod = "";
     switch(body.installMethod) {
         case "WinGet":
@@ -254,9 +254,9 @@ webApp.post('/add-install-method', async (request, result) => {
             result.send("Invalid 'Install Method' indicated.\nPlease use 'WinGet', 'Automated', or 'Manual'.");
             return;
     }
-	let location = mysqlClient.escape(body.location);
-	let silentFlag = mysqlClient.escape(body.silentFlag);
-	let pathFlag = mysqlClient.escape(body.pathFlag);
+	let location = body.location;
+	let silentFlag = body.silentFlag;
+	let pathFlag = body.pathFlag;
     mysqlClient.execute('INSERT INTO InstallMethod (ApplicationID, InstallMethod, Location, SilentFlag, PathFlag) VALUES (?, ?, ?, ?, ?);', [applicationID, installMethod, location, silentFlag, pathFlag], (error, results, fields) => {
         if (error) throw error;
     });
@@ -268,7 +268,7 @@ webApp.post('/add-install-method', async (request, result) => {
 
 webApp.post('/add-registry-info', async (request, result) => {
     let body = request.body;
-    let applicationID = mysqlClient.escape(body.applicationID);
+    let applicationID = body.applicationID;
     switch(body.keyLocation) {
         case "User":
             keyLocation = "User";
@@ -283,9 +283,9 @@ webApp.post('/add-registry-info', async (request, result) => {
             result.send("Invalid 'Key Location' indicated.\nPlease use 'User', 'System', or 'Other'.");
             return;
     }
-	let path = mysqlClient.escape(body.path);
+	let path = body.path;
     console.log(body.path + " --> " + path)
-    let folder = mysqlClient.escape(body.folder);
+    let folder = body.folder;
     mysqlClient.execute('INSERT INTO RegistryEntries (ApplicationID, KeyLocation, Path, Folder) VALUES (?, ?, ?, ?);', [applicationID, keyLocation, path, folder], (error, results, fields) => {
         if (error) throw error;
     });
@@ -297,7 +297,7 @@ webApp.post('/add-registry-info', async (request, result) => {
 
 webApp.post('/add-data-location', async (request, result) => {
     let body = request.body;
-    let applicationID = mysqlClient.escape(body.applicationID);
+    let applicationID = body.applicationID;
     switch(body.dataLocation) {
         case "Local":
             dataLocation = "Local";
@@ -318,8 +318,8 @@ webApp.post('/add-data-location', async (request, result) => {
             result.send("Invalid 'Data Location' indicated.\nPlease use 'Local', 'Roaming', 'Documents', 'Saved Games', or 'Other'.");
             return;
     }
-	let path = mysqlClient.escape(body.path);
-	let folder = mysqlClient.escape(body.folder);
+	let path = body.path;
+	let folder = body.folder;
     mysqlClient.execute('INSERT INTO ApplicationData (ApplicationID, DataLocation, Path, Folder) VALUES (?, ?, ?, ?);', [applicationID, dataLocation, path, folder], (error, results, fields) => {
         if (error) throw error;
     });
@@ -331,8 +331,8 @@ webApp.post('/add-data-location', async (request, result) => {
 
 webApp.post('/add-tag', async (request, result) => {
     let body = request.body;
-    let applicationID = mysqlClient.escape(body.applicationID);
-    let newTag = mysqlClient.escape(body.newTag);
+    let applicationID = body.applicationID;
+    let newTag = body.newTag;
     mysqlClient.execute('UPDATE Application SET tags = JSON_ARRAY_APPEND(tags, "$", ?) WHERE ID = ?;', [newTag, applicationID], (error, results, fields) => {
         if (error) throw error;
     });
@@ -344,7 +344,7 @@ webApp.post('/add-tag', async (request, result) => {
 
 webApp.post('/search', async (request, result) => {
     let body = request.body;
-    let query = mysqlClient.escape('%' + body.query + '%');
+    let query = '%' + body.query + '%';
     console.log(body.query)
     mysqlClient.execute('SELECT ID, Name, Uninstaller FROM Application WHERE (Name LIKE ?) OR (Uninstaller LIKE ?) OR (JSON_SEARCH(Tags, "one", ?));', [query, query, query], (error, results, fields) => {
         if (error) throw error;
