@@ -349,6 +349,7 @@ webApp.post('/add-tag', async (request, result) => {
         applicationID = search(name)['results'][0]['ID'];
     }
     let newTag = body.newTag;
+    console.log(applicationID)
     mysqlClient.execute('UPDATE Application SET tags = JSON_ARRAY_APPEND(tags, "$", ?) WHERE ID = ?;', [newTag, applicationID], (error, results, fields) => {
         if (error) throw error;
     });
