@@ -240,7 +240,7 @@ webApp.post('/add-install-method', async (request, result) => {
     let body = request.body;
     let name = request.name;
     let applicationID = body.applicationID;
-    if (applicationID) {
+    if (typeof applicationID == 'undefined') {
         applicationID = search(name)['results'][0]['ID'];
     }
     let installMethod = "";
@@ -274,7 +274,7 @@ webApp.post('/add-registry-info', async (request, result) => {
     let body = request.body;
     let name = request.name;
     let applicationID = body.applicationID;
-    if (applicationID) {
+    if (typeof applicationID == 'undefined') {
         applicationID = search(name)['results'][0]['ID'];
     }
     switch(body.keyLocation) {
@@ -307,7 +307,7 @@ webApp.post('/add-data-location', async (request, result) => {
     let body = request.body;
     let name = request.name;
     let applicationID = body.applicationID;
-    if (applicationID) {
+    if (typeof applicationID == 'undefined') {
         applicationID = search(name)['results'][0]['ID'];
     }
     switch(body.dataLocation) {
@@ -345,7 +345,7 @@ webApp.post('/add-tag', async (request, result) => {
     let body = request.body;
     let name = request.name;
     let applicationID = body.applicationID;
-    if (applicationID) {
+    if (typeof applicationID == 'undefined') {
         applicationID = search(name); //['results'][0]['ID'];
     }
     let newTag = body.newTag;
