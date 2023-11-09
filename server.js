@@ -346,7 +346,7 @@ webApp.post('/add-tag', async (request, result) => {
     let name = request.name;
     let applicationID = body.applicationID;
     if (applicationID) {
-        applicationID = search(name)['results'][0]['ID'];
+        applicationID = search(name); //['results'][0]['ID'];
     }
     let newTag = body.newTag;
     console.log(applicationID)
