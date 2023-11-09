@@ -238,7 +238,7 @@ webApp.post('/add-prog', async (request, result) => {
 
 webApp.post('/add-install-method', async (request, result) => {
     let body = request.body;
-    let name = request.name;
+    let name = body.name;
     let applicationID = body.applicationID;
     if (applicationID === undefined) {
         console.log("No ID specified. Searching database for: " + name)
@@ -273,7 +273,7 @@ webApp.post('/add-install-method', async (request, result) => {
 
 webApp.post('/add-registry-info', async (request, result) => {
     let body = request.body;
-    let name = request.name;
+    let name = body.name;
     let applicationID = body.applicationID;
     if (applicationID === undefined) {
         console.log("No ID specified. Searching database for: " + name)
@@ -307,7 +307,7 @@ webApp.post('/add-registry-info', async (request, result) => {
 
 webApp.post('/add-data-location', async (request, result) => {
     let body = request.body;
-    let name = request.name;
+    let name = body.name;
     let applicationID = body.applicationID;
     if (applicationID === undefined) {
         console.log("No ID specified. Searching database for: " + name)
@@ -346,7 +346,7 @@ webApp.post('/add-data-location', async (request, result) => {
 
 webApp.post('/add-tag', async (request, result) => {
     let body = request.body;
-    let name = request.name;
+    let name = body.name;
     let applicationID = body.applicationID;
     if (applicationID === undefined) {
         console.log("No ID specified. Searching database for: " + name)
