@@ -350,7 +350,8 @@ webApp.post('/add-tag', async (request, result) => {
     let applicationID = body.applicationID;
     if (applicationID === undefined) {
         console.log("No ID specified. Searching database for: " + name)
-        applicationID = await search(name)['results'][0]['ID'];
+        applicationID = await search(name);
+        applicationID = applicationID['results'][0]['ID'];
     }
     let newTag = body.newTag;
     console.log(applicationID)
