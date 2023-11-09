@@ -369,6 +369,7 @@ function search(query) {
     mysqlClient.execute('SELECT ID, Name, Uninstaller FROM Application WHERE (Name LIKE ?) OR (Uninstaller LIKE ?) OR (JSON_SEARCH(Tags, "one", ?));', [query, query, query], (error, results, fields) => {
         if (error) throw error;
         output = {}
+        console.log("Theoretially the query has been executed.")
         if (results.length) {
             console.log('Found results for "' + query + '" search.')
             output['header'] = 'Found ' + results.length + ' results for "' + body.query + '"';
@@ -386,9 +387,11 @@ function search(query) {
         } else {
             output = {}
             output['header'] = 'No results found for "' + body.query + '"';
+            console.log("Search returned no results :(")
         }
         return output;
     });
+    console.log("What are you DOING here?!");
 }
 
 webApp.post('/search', async (request, result) => {
