@@ -7,7 +7,7 @@ CREATE TABLE Application (
     Uninstaller VARCHAR(64),
     Homepage VARCHAR(256),
     Version VARCHAR(256) NOT NULL,
-    Tags JSON,
+    Tags JSON DEFAULT JSON_ARRAY(),
     PRIMARY KEY (ID)
 );
 CREATE TABLE InstallMethod (
