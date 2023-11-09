@@ -209,7 +209,6 @@ webApp.post('/add-prog', async (request, result) => {
     let homepage = body.homepage;
     let version = body.version;
     console.log(body.tags);
-    let tags = JSON.parse(body.tags);
     let newID = -1;
     mysqlClient.execute('SELECT count(*) AS Duplicates FROM Application WHERE (Name = ?) AND (Uninstaller = ?);', [name, uninstaller], (error, results, fields) => {
         if (error) throw error;
@@ -220,7 +219,7 @@ webApp.post('/add-prog', async (request, result) => {
             return
         }
         // mysqlClient.query('SELECT AUTO_INCREMENT AS "newID" FROM information_schema.TABLES WHERE TABLE_SCHEMA = "AppData" AND TABLE_NAME = "Application"', (error, results, fields) => {
-            mysqlClient.execute('INSERT INTO Application (Name, Uninstaller, Homepage, Version, Tags) VALUES (?, ?, ?, ?, JSON_ARRAY(?));', [name, uninstaller, homepage, version, tags], (error, results, fields) => {
+            mysqlClient.execute('INSERT INTO Application (Name, Uninstaller, Homepage, Version) VALUES (?, ?, ?, ?);', [name, uninstaller, homepage, version], (error, results, fields) => {
                 if (error) throw error;
                 let resultString = ""
                 mysqlClient.execute('SELECT ID AS "newID" FROM Application WHERE Name LIKE ?', [searchable_name], (error, results, fields) => {
