@@ -242,7 +242,7 @@ webApp.post('/add-install-method', async (request, result) => {
     let applicationID = body.applicationID;
     if (applicationID === undefined) {
         console.log("No ID specified. Searching database for: " + name)
-        applicationID = search(name)['results'][0]['ID'];
+        applicationID = await search(name)['results'][0]['ID'];
     }
     let installMethod = "";
     switch(body.installMethod) {
@@ -277,7 +277,7 @@ webApp.post('/add-registry-info', async (request, result) => {
     let applicationID = body.applicationID;
     if (applicationID === undefined) {
         console.log("No ID specified. Searching database for: " + name)
-        applicationID = search(name)['results'][0]['ID'];
+        applicationID = await search(name)['results'][0]['ID'];
     }
     switch(body.keyLocation) {
         case "User":
@@ -311,7 +311,7 @@ webApp.post('/add-data-location', async (request, result) => {
     let applicationID = body.applicationID;
     if (applicationID === undefined) {
         console.log("No ID specified. Searching database for: " + name)
-        applicationID = search(name)['results'][0]['ID'];
+        applicationID = await search(name)['results'][0]['ID'];
     }
     switch(body.dataLocation) {
         case "Local":
@@ -350,7 +350,7 @@ webApp.post('/add-tag', async (request, result) => {
     let applicationID = body.applicationID;
     if (applicationID === undefined) {
         console.log("No ID specified. Searching database for: " + name)
-        applicationID = search(name); //['results'][0]['ID'];
+        applicationID = await search(name); //['results'][0]['ID'];
     }
     let newTag = body.newTag;
     console.log(applicationID)
@@ -363,36 +363,69 @@ webApp.post('/add-tag', async (request, result) => {
     result.send(resultString + '\n');
 })
 
+// function search(query) {
+//     query = '%' + query + '%'
+//     console.log('Running app search for: ' + query);
+//     mysqlClient.execute('SELECT ID, Name, Uninstaller FROM Application WHERE (Name LIKE ?) OR (Uninstaller LIKE ?) OR (JSON_SEARCH(Tags, "one", ?));', [query, query, query], (error, results, fields) => {
+//         if (error) throw error;
+//         output = {}
+//         console.log("Theoretially the query has been executed.")
+//         if (results.length) {
+//             console.log('Found results for "' + query + '" search.')
+//             output['header'] = 'Found ' + results.length + ' results for "' + body.query + '"';
+//             output['results'] = [];
+//             console.log('Output structure: ' + output);
+//             for (var i in results) {
+//                 console.log('Adding "' + i + '" to output results');
+//                 output['results'][i] = {};
+//                 console.log('Adding "' + i['ID'] + '" to output results');
+//                 output['results'][i]['ID'] = results[i].ID
+//                 console.log('Adding "' + i['name'] + '" to output results');
+//                 output['results'][i]['name'] = results[i].Name;
+//             }
+//             console.log('Test output (output.results.0.name): "' + output['results'][i]['name'] + '"');
+//         } else {
+//             output['header'] = 'No results found for "' + body.query + '"';
+//             console.log("Search returned no results :(")
+//         }
+//         return output;
+//     });
+//     console.log("What are you DOING here?!");
+// }
+
 function search(query) {
-    query = '%' + query + '%'
-    console.log('Running app search for: ' + query);
-    mysqlClient.execute('SELECT ID, Name, Uninstaller FROM Application WHERE (Name LIKE ?) OR (Uninstaller LIKE ?) OR (JSON_SEARCH(Tags, "one", ?));', [query, query, query], (error, results, fields) => {
-        if (error) throw error;
-        output = {}
-        console.log("Theoretially the query has been executed.")
-        if (results.length) {
-            console.log('Found results for "' + query + '" search.')
-            output['header'] = 'Found ' + results.length + ' results for "' + body.query + '"';
-            output['results'] = [];
-            console.log('Output structure: ' + output);
-            for (var i in results) {
-                console.log('Adding "' + i + '" to output results');
-                output['results'][i] = {};
-                console.log('Adding "' + i['ID'] + '" to output results');
-                output['results'][i]['ID'] = results[i].ID
-                console.log('Adding "' + i['name'] + '" to output results');
-                output['results'][i]['name'] = results[i].Name;
-            }
-            console.log('Test output (output.results.0.name): "' + output['results'][i]['name'] + '"');
-        } else {
+    return new Promise((resolve, reject) => {
+        query = '%' + query + '%'
+        console.log('Running app search for: ' + query);
+        mysqlClient.execute('SELECT ID, Name, Uninstaller FROM Application WHERE (Name LIKE ?) OR (Uninstaller LIKE ?) OR (JSON_SEARCH(Tags, "one", ?));', [query, query, query], (error, results, fields) => {
+            if (error) reject(error);
             output = {}
-            output['header'] = 'No results found for "' + body.query + '"';
-            console.log("Search returned no results :(")
-        }
-        return output;
+            console.log("Theoretially the query has been executed.")
+            if (results.length) {
+                console.log('Found results for "' + query + '" search.')
+                output['header'] = 'Found ' + results.length + ' results for "' + body.query + '"';
+                output['results'] = [];
+                console.log('Output structure: ' + output);
+                for (var i in results) {
+                    console.log('Adding "' + i + '" to output results');
+                    output['results'][i] = {};
+                    console.log('Adding "' + i['ID'] + '" to output results');
+                    output['results'][i]['ID'] = results[i].ID
+                    console.log('Adding "' + i['name'] + '" to output results');
+                    output['results'][i]['name'] = results[i].Name;
+                }
+                console.log('Test output (output.results.0.name): "' + output['results'][i]['name'] + '"');
+            } else {
+                output = {}
+                output['header'] = 'No results found for "' + body.query + '"';
+                console.log("Search returned no results :(")
+            }
+            resolve(output);
+        });
     });
     console.log("What are you DOING here?!");
 }
+
 
 webApp.post('/search', async (request, result) => {
     let body = request.body;
