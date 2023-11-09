@@ -56,3 +56,14 @@ CREATE TABLE ApplicationData (
         REFERENCES Application(ID)
 );
 
+-- Reset DB:
+/* 
+DELETE FROM InstallMethod;
+ALTER TABLE InstallMethod AUTO_INCREMENT = 1;
+DELETE FROM RegistryEntries;
+ALTER TABLE RegistryEntries AUTO_INCREMENT = 1;
+DELETE FROM ApplicationData;
+ALTER TABLE ApplicationData AUTO_INCREMENT = 1;
+DELETE FROM Application;
+ALTER TABLE Application AUTO_INCREMENT = 1;
+*/
