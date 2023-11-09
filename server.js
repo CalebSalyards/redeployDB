@@ -208,7 +208,7 @@ webApp.post('/add-prog', async (request, result) => {
     let uninstaller = body.uninstaller;
     let homepage = body.homepage;
     let version = body.version;
-    let tags = body.tags;
+    let tags = JSON.parse(body.tags);
     let newID = -1;
     mysqlClient.execute('SELECT count(*) AS Duplicates FROM Application WHERE (Name = ?) AND (Uninstaller = ?);', [name, uninstaller], (error, results, fields) => {
         if (error) throw error;
