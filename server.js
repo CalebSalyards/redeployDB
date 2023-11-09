@@ -395,15 +395,15 @@ webApp.post('/add-tag', async (request, result) => {
 
 function search(query) {
     return new Promise((resolve, reject) => {
-        query = '%' + query + '%'
+        wc_query = '%' + query + '%'
         console.log('Running app search for: ' + query);
-        mysqlClient.execute('SELECT ID, Name, Uninstaller FROM Application WHERE (Name LIKE ?) OR (Uninstaller LIKE ?) OR (JSON_SEARCH(Tags, "one", ?));', [query, query, query], (error, results, fields) => {
+        mysqlClient.execute('SELECT ID, Name, Uninstaller FROM Application WHERE (Name LIKE ?) OR (Uninstaller LIKE ?) OR (JSON_SEARCH(Tags, "one", ?));', [wc_query, wc_query, wc_query], (error, results, fields) => {
             if (error) reject(error);
             output = {}
             console.log("Theoretially the query has been executed.")
             if (results.length) {
                 console.log('Found results for "' + query + '" search.')
-                output['header'] = 'Found ' + results.length + ' results for "' + body.query + '"';
+                output['header'] = 'Found ' + results.length + ' results for "' + query + '"';
                 output['results'] = [];
                 console.log('Output structure: ' + output);
                 for (var i in results) {
@@ -417,7 +417,7 @@ function search(query) {
                 console.log('Test output (output.results.0.name): "' + output['results'][i]['name'] + '"');
             } else {
                 output = {}
-                output['header'] = 'No results found for "' + body.query + '"';
+                output['header'] = 'No results found for "' + query + '"';
                 console.log("Search returned no results :(")
             }
             resolve(output);
