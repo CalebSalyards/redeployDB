@@ -239,7 +239,11 @@ webApp.post('/add-prog', async (request, result) => {
 
 webApp.post('/add-install-method', async (request, result) => {
     let body = request.body;
+    let name = request.name;
     let applicationID = body.applicationID;
+    if (applicationID) {
+        applicationID = search(name)['results'][0]['ID'];
+    }
     let installMethod = "";
     switch(body.installMethod) {
         case "WinGet":
@@ -269,7 +273,11 @@ webApp.post('/add-install-method', async (request, result) => {
 
 webApp.post('/add-registry-info', async (request, result) => {
     let body = request.body;
+    let name = request.name;
     let applicationID = body.applicationID;
+    if (applicationID) {
+        applicationID = search(name)['results'][0]['ID'];
+    }
     switch(body.keyLocation) {
         case "User":
             keyLocation = "User";
@@ -298,7 +306,11 @@ webApp.post('/add-registry-info', async (request, result) => {
 
 webApp.post('/add-data-location', async (request, result) => {
     let body = request.body;
+    let name = request.name;
     let applicationID = body.applicationID;
+    if (applicationID) {
+        applicationID = search(name)['results'][0]['ID'];
+    }
     switch(body.dataLocation) {
         case "Local":
             dataLocation = "Local";
@@ -332,7 +344,11 @@ webApp.post('/add-data-location', async (request, result) => {
 
 webApp.post('/add-tag', async (request, result) => {
     let body = request.body;
+    let name = request.name;
     let applicationID = body.applicationID;
+    if (applicationID) {
+        applicationID = search(name)['results'][0]['ID'];
+    }
     let newTag = body.newTag;
     mysqlClient.execute('UPDATE Application SET tags = JSON_ARRAY_APPEND(tags, "$", ?) WHERE ID = ?;', [newTag, applicationID], (error, results, fields) => {
         if (error) throw error;
@@ -343,10 +359,8 @@ webApp.post('/add-tag', async (request, result) => {
     result.send(resultString + '\n');
 })
 
-webApp.post('/search', async (request, result) => {
-    let body = request.body;
-    let query = '%' + body.query + '%';
-    console.log(body.query)
+function search(query) {
+    query = '%' + query + '%'
     mysqlClient.execute('SELECT ID, Name, Uninstaller FROM Application WHERE (Name LIKE ?) OR (Uninstaller LIKE ?) OR (JSON_SEARCH(Tags, "one", ?));', [query, query, query], (error, results, fields) => {
         if (error) throw error;
         if (results.length) {
@@ -362,9 +376,17 @@ webApp.post('/search', async (request, result) => {
             output = {}
             output['header'] = 'No results found for "' + body.query + '"';
         }
-        console.log(JSON.stringify(output));
-        result.send(JSON.stringify(output));
     });
+    return output;
+}
+
+webApp.post('/search', async (request, result) => {
+    let body = request.body;
+    let query = body.query;
+    output = search(query);
+    
+    console.log(JSON.stringify(output));
+    result.send(JSON.stringify(output));
     // mysqlClient.unprepare('SELECT ID, Name, Uninstaller FROM Application WHERE (Name LIKE ?) OR (Uninstaller LIKE ?) OR (JSON_SEARCH(Tags, "one", ?));');
     // mysqlClient.query('SELECT ID, Name, Uninstaller FROM Application WHERE (Name LIKE ?) OR (Uninstaller LIKE ?) OR (JSON_SEARCH(Tags, "one", ?));', [query, query, query], (error, results, fields) => {
     //     if (error) throw error;
