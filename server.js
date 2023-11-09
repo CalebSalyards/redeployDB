@@ -275,6 +275,7 @@ webApp.post('/add-registry-info', async (request, result) => {
     let name = request.name;
     let applicationID = body.applicationID;
     if (typeof applicationID == 'undefined') {
+        console.log("No ID specified. Searching database for: " + name)
         applicationID = search(name)['results'][0]['ID'];
     }
     switch(body.keyLocation) {
