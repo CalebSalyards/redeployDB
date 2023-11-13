@@ -217,3 +217,12 @@
 /setup.cgi
 /Temporary_Listen_Addresses
 /Pages/log/
+/cgi-bin/
+/sugar_version.json
+/solr
+/Telerik
+/showLogin.cc
+/webfig/
+/static/historypage.js
+/evox/about
+/HNAP1

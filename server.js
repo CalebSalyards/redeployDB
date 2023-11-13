@@ -19,8 +19,8 @@ const mysqlClient = mysql.createPool({
     database: 'AppData',
     waitForConnections: true,
     connectionLimit: 10,
-    maxIdle: 10, // max idle connections, the default value is the same as `connectionLimit`
-    idleTimeout: 60000, // idle connections timeout, in milliseconds, the default value 60000
+    maxIdle: 10,
+    idleTimeout: 60000,
     queueLimit: 0,
     enableKeepAlive: true,
     keepAliveInitialDelay: 0
@@ -124,6 +124,7 @@ webApp.get('/api/known-programs', async (request, result) => {
         if (results.length) {
             output = {}
             output['header'] = 'Found ' + results.length + ' known programs.';
+            output['status'] = true;
             output['results'] = [];
             for (var i in results) {
                 output['results'][i] = {};
@@ -133,6 +134,7 @@ webApp.get('/api/known-programs', async (request, result) => {
             result.status(503)
             output = {}
             output['header'] = 'No known programs.';
+            output['status'] = false;
         }
         result.send(JSON.stringify(output));
     });
@@ -145,6 +147,7 @@ webApp.get('/api/known-data', async (request, result) => {
         if (results.length) {
             output = {}
             output['header'] = 'Found' + results.length + ' known folders.';
+            output['status'] = true;
             output['results'] = [];
             for (var i in results) {
                 output['results'][i] = {};
@@ -156,6 +159,7 @@ webApp.get('/api/known-data', async (request, result) => {
             result.status(503)
             output = {}
             output['header'] = 'No known data locations.';
+            output['status'] = false;
         }
         result.send(JSON.stringify(output));
     });
@@ -168,6 +172,7 @@ webApp.get('/api/known-registries', async (request, result) => {
         if (results.length) {
             output = {}
             output['header'] = 'Found' + results.length + ' known folders.';
+            output['status'] = true;
             output['results'] = [];
             for (var i in results) {
                 output['results'][i] = {};
@@ -178,6 +183,7 @@ webApp.get('/api/known-registries', async (request, result) => {
             result.status(503)
             output = {}
             output['header'] = 'No known registry entries.';
+            output['status'] = false;
         }
         result.send(JSON.stringify(output));
     });
@@ -243,7 +249,13 @@ webApp.post('/add-install-method', async (request, result) => {
     if (applicationID === undefined) {
         // console.log("No ID specified. Searching database for: " + name)
         applicationID = await search(name);
-        applicationID = applicationID['results'][0]['ID'];
+        if (applicationID['status'] == true) {
+            applicationID = applicationID['results'][0]['ID'];
+        } else {
+            console.log(resultString);
+            result.send(resultString + '\n');
+            return;
+        }
     }
     let installMethod = "";
     switch(body.installMethod) {
@@ -279,7 +291,13 @@ webApp.post('/add-registry-info', async (request, result) => {
     if (applicationID === undefined) {
         // console.log("No ID specified. Searching database for: " + name)
         applicationID = await search(name);
-        applicationID = applicationID['results'][0]['ID'];
+        if (applicationID['status'] == true) {
+            applicationID = applicationID['results'][0]['ID'];
+        } else {
+            console.log(resultString);
+            result.send(resultString + '\n');
+            return;
+        }
     }
     switch(body.keyLocation) {
         case "User":
@@ -312,9 +330,15 @@ webApp.post('/add-data-location', async (request, result) => {
     let name = body.name;
     let applicationID = body.applicationID;
     if (applicationID === undefined) {
-        console.log("No ID specified. Searching database for: " + name)
+        // console.log("No ID specified. Searching database for: " + name)
         applicationID = await search(name);
-        applicationID = applicationID['results'][0]['ID'];
+        if (applicationID['status'] == true) {
+            applicationID = applicationID['results'][0]['ID'];
+        } else {
+            console.log(resultString);
+            result.send(resultString + '\n');
+            return;
+        }
     }
     switch(body.dataLocation) {
         case "Local":
@@ -354,7 +378,13 @@ webApp.post('/add-tag', async (request, result) => {
     if (applicationID === undefined) {
         // console.log("No ID specified. Searching database for: " + name)
         applicationID = await search(name);
-        applicationID = applicationID['results'][0]['ID'];
+        if (applicationID['status'] == true) {
+            applicationID = applicationID['results'][0]['ID'];
+        } else {
+            console.log(resultString);
+            result.send(resultString + '\n');
+            return;
+        }
     }
     let newTag = body.newTag;
     console.log(applicationID)
@@ -378,6 +408,7 @@ function search(query) {
             if (results.length) {
                 // console.log('Found results for "' + query + '" search.')
                 output['header'] = 'Found ' + results.length + ' results for "' + query + '"';
+                output['status'] = true;
                 output['results'] = [];
                 // console.log('Output structure: ' + output);
                 for (var i in results) {
@@ -392,6 +423,7 @@ function search(query) {
             } else {
                 output = {}
                 output['header'] = 'No results found for "' + query + '"';
+                output['status'] = false;
                 // console.log("Search returned no results :(")
             }
             resolve(output);
