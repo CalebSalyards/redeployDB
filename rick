@@ -226,3 +226,7 @@
 /static/historypage.js
 /evox/about
 /HNAP1
+/gate.php
+/server-status
+/config.json
+/telescope/requests
